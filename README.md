@@ -3,6 +3,7 @@ Tests general peering performance by comparing pings across publicly available t
 This script compares pings to multiple regions (North America, Europe, Asia & Oceania).
 
 Run the benchmark by running this one-liner (requires wget):
+
 wget https://pluush.github.io/pingbench/pingbench.sh -O - -o /dev/null | bash
 
 This script will give you a score between 0 to 100, but both ends are not achieveable under real-world conditions.
