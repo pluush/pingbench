@@ -1,4 +1,11 @@
 # pingbench
-Tests general peering performance by comparing pings across publicly available test servers, and get a general score.
+Tests general peering performance by comparing pings across publicly available test servers.
+This script compares pings to multiple regions (North America, Europe, Asia & Oceania).
 
-This script is still a work in progress.
+Run the benchmark by running this one-liner (requires wget):
+wget https://pluush.github.io/pingbench/pingbench.sh -O - -o /dev/null | bash
+
+This script will give you a score between 0 to 100, but both ends are not achieveable under real-world conditions.
+A higher score would mean better overall peering. Sample use case for this script is when you want to find a good proxy / VPN server with a good connection worldwide.
+
+Suggestions would be great!
