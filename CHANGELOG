@@ -1,3 +1,6 @@
+v0.3.3 (10/11/2017)
+-> Removed Akamai Web (unoptimized DNS pointer)
+
 v0.3.2 (10/11/2017)
 -> Improved awk data checking at variable pinn
 
