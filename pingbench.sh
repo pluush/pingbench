@@ -1,6 +1,6 @@
 ########################################
 # Ping benchmark script by pluush      #
-# v0.3.2                               #
+# v0.3.3                               #
 # Copyright(C) 2017 - pluush           #
 ########################################
 
@@ -34,7 +34,7 @@ region=0 # Region count
 # Ping test via ping
 echo " "
 echo "-----------------------------------------------------------------"
-echo "Ping benchmark by Plush"
+echo "Ping benchmark by plush (v0.3.3)"
 echo "Your public IPv4 is $ip"
 echo "-----------------------------------------------------------------"
 echo " "
@@ -48,17 +48,15 @@ serv="8.8.8.8"; pingcalc; resc00=$res;
 echo "Google DNS			Google			$resd"
 serv="cachefly.cachefly.net"; pingcalc; resc01=$res; 
 echo "Cachefly CDN			Cachefly		$resd"
-serv="cdn.teliacompany.com"; pingcalc; resc05=$res; 
+serv="cdn.teliacompany.com"; pingcalc; resc04=$res; 
 echo "Telia CDN Web			Telia			$resd"
 serv="cloudflare.com"; pingcalc; resc02=$res; 
 echo "Cloudflare Web			Cloudflare		$resd"
-serv="akamai.com"; pingcalc; resc03=$res; 
-echo "Akamai Web			Akamai			$resd"
-serv="facebook.com"; pingcalc; resc04=$res; 
+serv="facebook.com"; pingcalc; resc03=$res; 
 echo "Facebook Web			Facebook		$resd"
 echo "-----------------------------------------------------------------"
 if [ "$scountl" != "0" ]; then
-cdnavg=$(echo "$resc00 $resc01 $resc02 $resc03 $resc04 $resc05 $scountl" | awk '{print $1/$7 + $2/$7 + $3/$7 + $4/$7 + $5/$7 + $6/$7}');
+cdnavg=$(echo "$resc00 $resc01 $resc02 $resc03 $resc04 $scountl" | awk '{print $1/$6 + $2/$6 + $3/$6 + $4/$6 + $5/$6}');
 echo "Successful servers : $scountl / Average ping : $cdnavg ms"
 cdnavgnorm=$(echo "$cdnavg" | awk '{print $1+20}');
 scorecdn=$(echo "$cdnavgnorm 200" | awk '{print exp(-$1/$2)*110.517091808}');
