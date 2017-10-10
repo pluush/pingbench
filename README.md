@@ -10,3 +10,5 @@ This script will give you a score between 0 to 100, but both ends are not achiev
 A higher score would mean better overall peering. Sample use case for this script is when you want to find a good proxy / VPN server with a good connection worldwide. This can also be effective if you want to choose an ISP for gaming, host game servers, or just run latency-critical apps.
 
 Suggestions would be great!
+
+P.S. THIS SCRIPT COMES WITH ABSOLUTELY NO WARRANTY.
