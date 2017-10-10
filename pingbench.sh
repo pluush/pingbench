@@ -1,41 +1,27 @@
 ########################################
 # Ping benchmark script by pluush      #
-# v0.3                                 #
+# v0.3.1                               #
 # Copyright(C) 2017 - pluush           #
 ########################################
 
+doping(){
+pin=$(ping -w 2 $serv -c 1 | grep time= | awk -F = '{print $4}')
+pinn=$(echo $pin | awk '{print $1}')
+if [ -z "$pinn" ]; then count=$count; pinn=0; else count=$[$count+1];fi
+}
+
 pingcalc (){
 count=0 # Successful ping counts
-pin0=$(ping -w 2 $serv -c 1 | grep time= | awk -F = '{print $4}')
-pin1=$(ping -w 2 $serv -c 1 | grep time= | awk -F = '{print $4}')
-pin2=$(ping -w 2 $serv -c 1 | grep time= | awk -F = '{print $4}')
-pin3=$(ping -w 2 $serv -c 1 | grep time= | awk -F = '{print $4}')
-pin4=$(ping -w 2 $serv -c 1 | grep time= | awk -F = '{print $4}')
-pin5=$(ping -w 2 $serv -c 1 | grep time= | awk -F = '{print $4}')
-pin6=$(ping -w 2 $serv -c 1 | grep time= | awk -F = '{print $4}')
-pin7=$(ping -w 2 $serv -c 1 | grep time= | awk -F = '{print $4}')
-pin8=$(ping -w 2 $serv -c 1 | grep time= | awk -F = '{print $4}')
-pin9=$(ping -w 2 $serv -c 1 | grep time= | awk -F = '{print $4}')
-pin0n=$(echo $pin0 | awk '{print $1}')
-pin1n=$(echo $pin1 | awk '{print $1}')
-pin2n=$(echo $pin2 | awk '{print $1}')
-pin3n=$(echo $pin3 | awk '{print $1}')
-pin4n=$(echo $pin4 | awk '{print $1}')
-pin5n=$(echo $pin5 | awk '{print $1}')
-pin6n=$(echo $pin6 | awk '{print $1}')
-pin7n=$(echo $pin7 | awk '{print $1}')
-pin8n=$(echo $pin8 | awk '{print $1}')
-pin9n=$(echo $pin9 | awk '{print $1}')
-if [ -z "$pin0n" ]; then count=$count; pin0n=0; else count=$[$count+1];fi
-if [ -z "$pin1n" ]; then count=$count; pin1n=0; else count=$[$count+1];fi
-if [ -z "$pin2n" ]; then count=$count; pin2n=0; else count=$[$count+1];fi
-if [ -z "$pin3n" ]; then count=$count; pin3n=0; else count=$[$count+1];fi
-if [ -z "$pin4n" ]; then count=$count; pin4n=0; else count=$[$count+1];fi
-if [ -z "$pin5n" ]; then count=$count; pin5n=0; else count=$[$count+1];fi
-if [ -z "$pin6n" ]; then count=$count; pin6n=0; else count=$[$count+1];fi
-if [ -z "$pin7n" ]; then count=$count; pin7n=0; else count=$[$count+1];fi
-if [ -z "$pin8n" ]; then count=$count; pin8n=0; else count=$[$count+1];fi
-if [ -z "$pin9n" ]; then count=$count; pin9n=0; else count=$[$count+1];fi
+doping; pin0=$pin; pin0n=$pinn
+doping; pin1=$pin; pin1n=$pinn
+doping; pin2=$pin; pin2n=$pinn
+doping; pin3=$pin; pin3n=$pinn
+doping; pin4=$pin; pin4n=$pinn
+doping; pin5=$pin; pin5n=$pinn
+doping; pin6=$pin; pin6n=$pinn
+doping; pin7=$pin; pin7n=$pinn
+doping; pin8=$pin; pin8n=$pinn
+doping; pin9=$pin; pin9n=$pinn
 if [ "$count" = 0 ]; then pin1n=0; pin2n=0; pin3n=0; pin4n=0; pin5n=0; pin6n=0; pin7n=0; pin8n=0; pin9n=0; pin0n=0; count=1; fi 
 res=$(echo "$pin0n $pin1n $pin2n $pin3n $pin4n $pin5n $pin6n $pin7n $pin8n $pin9n $count" | awk '{print $1/$11 + $2/$11 + $3/$11 + $4/$11 + $5/$11 + $6/$11 + $7/$11 + $8/$11 + $9/$11 + $10/$11}');
 if [ "$res" = "0" ]; then resd="Timeout"; else resd="$res ms"; scount=$[$scount+1]; scountl=$[$scountl+1]; fi 
@@ -43,6 +29,7 @@ if [ "$res" = "0" ]; then resd="Timeout"; else resd="$res ms"; scount=$[$scount+
 
 ip=$( wget -qO- ipv4.icanhazip.com ) # Getting IPv4
 scount=0 # Non-timeout server count
+region=0 # Region count
 
 # Ping test via ping
 echo " "
@@ -65,16 +52,26 @@ serv="cdn.teliacompany.com"; pingcalc; resc05=$res;
 echo "Telia CDN Web			Telia			$resd"
 serv="cloudflare.com"; pingcalc; resc02=$res; 
 echo "Cloudflare Web			Cloudflare		$resd"
-serv="cloudflare.com"; pingcalc; resc03=$res; 
+serv="akamai.com"; pingcalc; resc03=$res; 
 echo "Akamai Web			Akamai			$resd"
 serv="facebook.com"; pingcalc; resc04=$res; 
 echo "Facebook Web			Facebook		$resd"
 echo "-----------------------------------------------------------------"
+if [ "$scountl" != "0" ]; then
 cdnavg=$(echo "$resc00 $resc01 $resc02 $resc03 $resc04 $resc05 $scountl" | awk '{print $1/$7 + $2/$7 + $3/$7 + $4/$7 + $5/$7 + $6/$7}');
 echo "Successful servers : $scountl / Average ping : $cdnavg ms"
 cdnavgnorm=$(echo "$cdnavg" | awk '{print $1+20}');
 scorecdn=$(echo "$cdnavgnorm 200" | awk '{print exp(-$1/$2)*110.517091808}');
 echo "Score : $scorecdn"
+cdns=1
+else
+cdns=0
+echo "All servers are unreachable. Please check your firewall."
+cdnavgnorm=0
+scorecdn=0
+err=1
+err1="(CDN servers are unreachable) " 
+fi
 
 echo " "
 echo " "
@@ -144,10 +141,19 @@ echo "Toronto, ON, Canada		DigitalOcean		$resd"
 serv="198.50.175.241"; pingcalc; res029=$res; 
 echo "Montréal, QC, Canada		OVH			$resd"
 echo "-----------------------------------------------------------------"
+if [ "$scountl" != "0" ]; then
 ameavg=$(echo "$res000 $res001 $res002 $res003 $res004 $res005 $res006 $res007 $res008 $res009 $res010 $res011 $res012 $res013 $res014 $res015 $res016 $res017 $res018 $res019 $res020 $res021 $res022 $res023 $res024 $res025 $res026 $res027 $res028 $res029 $scountl" | awk '{print $1/$31 + $2/$31 + $3/$31 + $4/$31 + $5/$31 + $6/$31 + $7/$31 + $8/$31 + $9/$31 + $10/$31 + $11/$31 + $12/$31 + $13/$31 + $14/$31 + $15/$31 + $16/$31 + $17/$31 + $18/$31 + $19/$31 + $20/$31 + $21/$31 + $22/$31 + $23/$31 + $24/$31 + $25/$31 + $26/$31 + $27/$31 + $28/$31 + $29/$31 + $30/$31}');
 echo "Successful servers : $scountl / Average ping : $ameavg ms"
 scoreame=$(echo "$ameavg 400" | awk '{print exp(-$1/$2)*100}');
 echo "Score : $scoreame"
+region=$[$region+1]
+else
+echo "All servers are unreachable. Please check your firewall."
+ameavg=0
+scoreame=0
+err=1
+err2="(American servers are unreachable) " 
+fi
 
 echo " "
 echo " "
@@ -187,10 +193,19 @@ echo "Copenhagen, Denmark		Cogent (Router)		$resd"
 serv="81.2.236.1"; pingcalc; res114=$res; 
 echo "Prague, Czech Republic		Aruba Cloud		$resd"
 echo "-----------------------------------------------------------------"
+if [ "$scountl" != "0" ]; then
 euavg=$(echo "$res100 $res101 $res102 $res103 $res104 $res105 $res106 $res107 $res108 $res109 $res110 $res111 $res112 $res113 $res114 $scountl" | awk '{print $1/$16 + $2/$16 + $3/$16 + $4/$16 + $5/$16 + $6/$16 + $7/$16 + $8/$16 + $9/$16 + $10/$16 + $11/$16 + $12/$16 + $13/$16 + $14/$16 + $15/$16}');
 echo "Successful servers : $scountl / Average ping : $euavg ms"
 scoreeu=$(echo "$euavg 400" | awk '{print exp(-$1/$2)*100}');
 echo "Score : $scoreeu"
+region=$[$region+1]
+else
+echo "All servers are unreachable. Please check your firewall."
+euavg=0
+scoreeu=0
+err=1
+err3="(European servers are unreachable) " 
+fi
 
 echo " "
 echo " "
@@ -246,10 +261,19 @@ echo "Sydney, Australia		OVH			$resd"
 serv="202.68.64.214"; pingcalc; res219=$res; 
 echo "Sydney, Australia		NTT (Router)		$resd"
 echo "-----------------------------------------------------------------"
+if [ "$scountl" != "0" ]; then
 asiavg=$(echo "$res200 $res201 $res202 $res203 $res204 $res205 $res206 $res207 $res208 $res209 $res210 $res211 $res212 $res213 $res214 $res215 $res216 $res217 $res218 $res219 $res220 $res221 $res222 $scountl" | awk '{print $1/$24 + $2/$24 + $3/$24 + $4/$24 + $5/$24 + $6/$24 + $7/$24 + $8/$24 + $9/$24 + $10/$24 + $11/$24 + $12/$24 + $13/$24 + $14/$24 + $15/$24 + $16/$24 + $17/$24 + $18/$24 + $19/$24 + $20/$24 +  $21/$24 + $22/$24 + $23/$24}');
 echo "Successful servers : $scountl / Average ping : $asiavg ms"
 scoreasi=$(echo "$asiavg 400" | awk '{print exp(-$1/$2)*100}');
 echo "Score : $scoreasi"
+region=$[$region+1]
+else
+echo "All servers are unreachable. Please check your firewall."
+asiavg=0
+scoreasi=0
+err=1
+err4="(Asian servers are unreachable) " 
+fi
 
 echo " "
 echo " "
@@ -279,16 +303,35 @@ echo "Hubei, China			China Telecom		$resd"
 serv="182.254.34.87"; pingcalc; res309=$res; 
 echo "Guangdong, China		Tencent Cloud		$resd"
 echo "-----------------------------------------------------------------"
+if [ "$scountl" != "0" ]; then
 cnavg=$(echo "$res300 $res301 $res302 $res303 $res304 $res305 $res306 $res307 $res308 $res309 $scountl" | awk '{print $1/$11 + $2/$11 + $3/$11 + $4/$11 + $5/$11 + $6/$11 + $7/$11 + $8/$11 + $9/$11 + $10/$11}');
 echo "Successful servers : $scountl / Average ping : $cnavg ms"
 scorecn=$(echo "$cnavg 500" | awk '{print exp(-$1/$2)*100}');
 echo "Score : $scorecn"
+region=$[$region+1]
+else
+echo "All servers are unreachable. Please check your firewall."
+cnavg=0
+scorecn=0
+err=1
+err5="(Chinese servers are unreachable) " 
+fi
 
 echo " "
 echo " "
 echo "-----------------------------------------------------------------"
-regionalavg=$(echo "$ameavg $euavg $asiavg $cnavg" | awk '{print $1/4 + $2/4 + $3/4 + $4/4}');
+if [ "$region" != 0 ]; then
+regionalavg=$(echo "$ameavg $euavg $asiavg $cnavg $region" | awk '{print $1/$5 + $2/$5 + $3/$5 + $4/$5}');
 echo "Regional average : $regionalavg ms"
-overalls=$(echo "$scorecdn $scoreame $scoreeu $scoreasi $scorecn" | awk '{print $1/5 + $2/5 + $3/5 + $4/5 + $5/5}');
+total=$[$cdns+$region]
+overalls=$(echo "$scorecdn $scoreame $scoreeu $scoreasi $scorecn $total" | awk '{print $1/$6 + $2/$6 + $3/$6 + $4/$6 + $5/$6}');
 echo "Overall peering score : $overalls"
+if [ "$err" = 1 ]; then
+echo "Errors: $err1$err2$err3$err4$err5"
+echo "If the test ended with errors, scores are not comparable, unless"
+echo "the comparisons are made with other servers with the same error."
+fi
+else
+echo "All servers are unreachable. Is your Internet off?"
+fi
 echo "-----------------------------------------------------------------"
