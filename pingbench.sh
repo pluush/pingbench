@@ -1,13 +1,13 @@
 ########################################
 # Ping benchmark script by pluush      #
-# v0.3.1                               #
+# v0.3.2                               #
 # Copyright(C) 2017 - pluush           #
 ########################################
 
 doping(){
 pin=$(ping -w 2 $serv -c 1 | grep time= | awk -F = '{print $4}')
 pinn=$(echo $pin | awk '{print $1}')
-if [ -z "$pinn" ]; then count=$count; pinn=0; else count=$[$count+1];fi
+if ! [[ "$pinn" =~ ^[0-9.]+$ ]]; then pinn=0; else count=$[$count+1];fi # Bad data check
 }
 
 pingcalc (){
