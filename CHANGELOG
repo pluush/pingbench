@@ -1,0 +1,8 @@
+v0.3.1
+-> Change to doping commands inside of pingcalc to shorten script
+-> Fix Akamai CDN link
+-> Added error handling on regions and error messages
+-> Added error handling when all regions are not contactable
+
+v0.3
+Initial release
