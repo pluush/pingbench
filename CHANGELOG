@@ -1,4 +1,7 @@
-v0.3.1
+v0.3.2 (10/11/2017)
+-> Improved awk data checking at variable pinn
+
+v0.3.1 (10/11/2017)
 -> Change to doping commands inside of pingcalc to shorten script
 -> Fix Akamai CDN link
 -> Added error handling on regions and error messages
