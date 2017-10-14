@@ -1,6 +1,6 @@
 ########################################
 # Ping benchmark script by pluush      #
-# v0.4.2                               #
+# v0.4.3                               #
 # Copyright(C) 2017 - pluush           #
 # github.com/pluush/pingbench          #
 # NOTE: Scores are not comparable      #
@@ -22,7 +22,7 @@ doping & pid1=$!; doping & pid2=$!; doping & pid3=$!; doping & pid4=$!; doping &
 wait $pid1; wait $pid2; wait $pid3; wait $pid4; wait $pid5; wait $pid6; wait $pid7; wait $pid8; wait $pid9; wait $pid10
 eqn=$(cat /tmp/pingbench-ping.tmp); ttlt=$(echo $eqn | awk '{print $1 + $2 + $3 + $4 + $5 + $6 + $7 + $8 + $9 + $10}')
 count=$(cat /tmp/pingbench-count.tmp); n=$(echo "$count" | grep ok | sort | uniq -c | awk '{print $1}')
-if [ "$n" = 0 ]; then n=1; ttlt=0; fi 
+if ! [[ "$n" =~ ^[0-9]+$ ]]; then n=1; ttlt=0; fi 
 res=$(echo "$ttlt $n" | awk '{print $1/$2}');
 if [ "$res" = "0" ]; then resd="Timeout"; else resd="$res ms"; scount=$[$scount+1]; scountl=$[$scountl+1]; fi 
 }
@@ -33,7 +33,7 @@ scount=0; region=0 # Total server and region count
 # Ping test via ping
 echo " "
 echo "-----------------------------------------------------------------"
-echo "Ping benchmark by plush (v0.4.2)"
+echo "Ping benchmark by plush (v0.4.3)"
 echo "Your public IPv4 is $ip"
 echo "-----------------------------------------------------------------"
 echo " "
