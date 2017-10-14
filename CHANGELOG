@@ -1,3 +1,6 @@
+v0.4.1 (10/15/2017)
+-> Fixed a critical file bug caused by not waiting (use of &) when writing to /tmp/pingbench-count.tmp causing in an unchanged file when removal is called on pingcalc
+
 v0.4 (10/14/2017)
 -> Significantly shortened test times by enabling simultaneous ping (requires /tmp read/write)
 -> Change of algorithm in doping function
@@ -11,7 +14,6 @@ v0.4 (10/14/2017)
    + OVH Roubaix
    Update AWS Tokyo Link
    Change from domain name to IP for Psychz Taiwan
-EDIT: Bug found. Please use the old version.
    
 v0.3.3 (10/11/2017)
 -> Removed Akamai Web (unoptimized DNS pointer)
