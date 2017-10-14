@@ -1,6 +1,6 @@
 ########################################
 # Ping benchmark script by pluush      #
-# v0.4.1                               #
+# v0.4.2                               #
 # Copyright(C) 2017 - pluush           #
 # github.com/pluush/pingbench          #
 # NOTE: Scores are not comparable      #
@@ -9,12 +9,13 @@
 
 doping(){
 pin=$(ping -w 2 $serv -c 1 | grep time= | awk -F = '{print $4}'); pinn=$(echo $pin | awk '{print $1}')
-if ! [[ "$pinn" =~ ^[0-9.]+$ ]]; then pinn=0; else count="ok"; fi # Bad data check
+if ! [[ "$pinn" =~ ^[0-9.]+$ ]]; then pinn=0; count=""; else count="ok"; fi # Bad data check
 echo "$pinn" >> /tmp/pingbench-ping.tmp
 echo "$count" >> /tmp/pingbench-count.tmp
 }
 
 pingcalc (){
+sleep 0.1
 rm /tmp/pingbench-ping.tmp -f
 rm /tmp/pingbench-count.tmp -f
 doping & pid1=$!; doping & pid2=$!; doping & pid3=$!; doping & pid4=$!; doping & pid5=$!; doping & pid6=$!; doping & pid7=$!; doping & pid8=$!; doping & pid9=$!; doping & pid10=$!
@@ -32,7 +33,7 @@ scount=0; region=0 # Total server and region count
 # Ping test via ping
 echo " "
 echo "-----------------------------------------------------------------"
-echo "Ping benchmark by plush (v0.4.1)"
+echo "Ping benchmark by plush (v0.4.2)"
 echo "Your public IPv4 is $ip"
 echo "-----------------------------------------------------------------"
 echo " "
