@@ -1,3 +1,17 @@
+v0.4 (10/14/2017)
+-> Significantly shortened test times by enabling simultaneous ping (requires /tmp read/write)
+-> Change of algorithm in doping function
+-> Removal of all router IPs
+-> Server changes:
+   + AWS São Paulo
+   + AWS Seoul
+   + AWS Sydney
+   + AWS Beijing
+   + SAKURA Internet Tokyo
+   + OVH Roubaix
+   Update AWS Tokyo Link
+   Change from domain name to IP for Psychz Taiwan
+   
 v0.3.3 (10/11/2017)
 -> Removed Akamai Web (unoptimized DNS pointer)
 -> Added version number to the result page
