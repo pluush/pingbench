@@ -1,6 +1,6 @@
 ########################################
 # Ping benchmark script by pluush      #
-# v0.4                                 #
+# v0.4.1                               #
 # Copyright(C) 2017 - pluush           #
 # github.com/pluush/pingbench          #
 # NOTE: Scores are not comparable      #
@@ -10,12 +10,13 @@
 doping(){
 pin=$(ping -w 2 $serv -c 1 | grep time= | awk -F = '{print $4}'); pinn=$(echo $pin | awk '{print $1}')
 if ! [[ "$pinn" =~ ^[0-9.]+$ ]]; then pinn=0; else count="ok"; fi # Bad data check
-echo "$pinn" >> /tmp/pingbench-ping.tmp & echo "$count" >> /tmp/pingbench-count.tmp &
+echo "$pinn" >> /tmp/pingbench-ping.tmp
+echo "$count" >> /tmp/pingbench-count.tmp
 }
 
 pingcalc (){
-echo "" > /tmp/pingbench-ping.tmp
-echo "" > /tmp/pingbench-count.tmp
+rm /tmp/pingbench-ping.tmp -f
+rm /tmp/pingbench-count.tmp -f
 doping & pid1=$!; doping & pid2=$!; doping & pid3=$!; doping & pid4=$!; doping & pid5=$!; doping & pid6=$!; doping & pid7=$!; doping & pid8=$!; doping & pid9=$!; doping & pid10=$!
 wait $pid1; wait $pid2; wait $pid3; wait $pid4; wait $pid5; wait $pid6; wait $pid7; wait $pid8; wait $pid9; wait $pid10
 eqn=$(cat /tmp/pingbench-ping.tmp); ttlt=$(echo $eqn | awk '{print $1 + $2 + $3 + $4 + $5 + $6 + $7 + $8 + $9 + $10}')
@@ -31,7 +32,7 @@ scount=0; region=0 # Total server and region count
 # Ping test via ping
 echo " "
 echo "-----------------------------------------------------------------"
-echo "Ping benchmark by plush (v0.4)"
+echo "Ping benchmark by plush (v0.4.1)"
 echo "Your public IPv4 is $ip"
 echo "-----------------------------------------------------------------"
 echo " "
