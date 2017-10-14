@@ -1,5 +1,8 @@
+v0.4.2 (10/15/2017)
+-> Fixed a critical bug caused by not stating the state of count when ping fails.
+
 v0.4.1 (10/15/2017)
--> Fixed a critical file bug caused by not waiting (use of &) when writing to /tmp/pingbench-count.tmp causing in an unchanged file when removal is called on pingcalc
+-> Attempted bugfix (failed)
 
 v0.4 (10/14/2017)
 -> Significantly shortened test times by enabling simultaneous ping (requires /tmp read/write)
