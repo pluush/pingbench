@@ -1,3 +1,6 @@
+v0.4.3 (10/15/2017)
+-> Fixed a critical bug caused by incorrect handling when count data is not detected (Timeouts on all ping)
+
 v0.4.2 (10/15/2017)
 -> Fixed a critical bug caused by not stating the state of count when ping fails.
 
