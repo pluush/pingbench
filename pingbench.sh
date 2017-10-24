@@ -1,6 +1,6 @@
 ########################################
 # Ping benchmark script by pluush      #
-# v0.4.3                               #
+# v0.4.4                               #
 # Copyright(C) 2017 - pluush           #
 # github.com/pluush/pingbench          #
 # NOTE: Scores are not comparable      #
@@ -33,7 +33,7 @@ scount=0; region=0 # Total server and region count
 # Ping test via ping
 echo " "
 echo "-----------------------------------------------------------------"
-echo "Ping benchmark by plush (v0.4.3)"
+echo "Ping benchmark by plush (v0.4.4)"
 echo "Your public IPv4 is $ip"
 echo "-----------------------------------------------------------------"
 echo " "
@@ -133,7 +133,7 @@ serv="lg.va.psychz.net"; pingcalc; res027=$res;
 echo "Ashburn, VA, U.S.		Psychz			$resd"
 serv="speedtest-tor1.digitalocean.com"; pingcalc; res028=$res; 
 echo "Toronto, ON, Canada		DigitalOcean		$resd"
-serv="198.50.175.241"; pingcalc; res029=$res; 
+serv="198.50.174.1"; pingcalc; res029=$res; 
 echo "Montréal, QC, Canada		OVH			$resd"
 serv="ec2.sa-east-1.amazonaws.com"; pingcalc; res004=$res; 
 echo "São Paulo, Brazil		Amazon Web Services	$resd"
