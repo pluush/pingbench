@@ -1,3 +1,6 @@
+v0.4.4 (10/25/2017)
+-> Update IP for OVH Montréal
+
 v0.4.3 (10/15/2017)
 -> Fixed a critical bug caused by incorrect handling when count data is not detected (Timeouts on all ping)
 
