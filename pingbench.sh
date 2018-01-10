@@ -1,6 +1,6 @@
 ########################################
 # Ping benchmark script by pluush      #
-# v0.4.4                               #
+# v1.0 alpha 1                         #
 # Copyright(C) 2017 - pluush           #
 # github.com/pluush/pingbench          #
 # NOTE: Scores are not comparable      #
@@ -14,52 +14,183 @@ echo "$pinn" >> /tmp/pingbench-ping.tmp
 echo "$count" >> /tmp/pingbench-count.tmp
 }
 
-pingcalc (){
-sleep 0.1
+doping6(){
+timeout6=0
+if [ $serv6 = "NA" ]; then
+pinn6=0; count6="" 
+else
+pin6=$(ping6 -w 2 $serv6 -c 1 | grep time= | awk -F = '{print $4}'); pinn6=$(echo $pin6 | awk '{print $1}')
+if ! [[ "$pinn6" =~ ^[0-9.]+$ ]]; then pinn6=0; count6=""; else count6="ok"; fi # Bad data check
+fi
+echo "$pinn6" >> /tmp/pingbench-ping6.tmp
+echo "$count6" >> /tmp/pingbench-count6.tmp
+}
+
+pingcalc(){
+if [ $nip = 2 ]; then
 rm /tmp/pingbench-ping.tmp -f
 rm /tmp/pingbench-count.tmp -f
-doping & pid1=$!; doping & pid2=$!; doping & pid3=$!; doping & pid4=$!; doping & pid5=$!; doping & pid6=$!; doping & pid7=$!; doping & pid8=$!; doping & pid9=$!; doping & pid10=$!
+rm /tmp/pingbench-ping6.tmp -f
+rm /tmp/pingbench-count6.tmp -f
+doping & pid1=$!; doping & pid2=$!; doping & pid3=$!; doping & pid4=$!; doping & pid5=$!; doping & pid6=$!; doping & pid7=$!; doping & pid8=$!; doping & pid9=$!; doping & pid10=$!; doping6 & pid11=$!; doping6 & pid12=$!; doping6 & pid13=$!; doping6 & pid14=$!; doping6 & pid15=$!; doping6 & pid16=$!; doping6 & pid17=$!; doping6 & pid18=$!; doping6 & pid19=$!; doping6 & pid20=$!
+wait $pid1; wait $pid2; wait $pid3; wait $pid4; wait $pid5; wait $pid6; wait $pid7; wait $pid8; wait $pid9; wait $pid10
+wait $pid11; wait $pid12; wait $pid13; wait $pid14; wait $pid15; wait $pid16; wait $pid17; wait $pid18; wait $pid19; wait $pid20
+eqn=$(cat /tmp/pingbench-ping.tmp); ttlt=$(echo $eqn | awk '{print $1 + $2 + $3 + $4 + $5 + $6 + $7 + $8 + $9 + $10}')
+count=$(cat /tmp/pingbench-count.tmp); n=$(echo "$count" | grep ok | sort | uniq -c | awk '{print $1}')
+if ! [[ "$n" =~ ^[0-9]+$ ]]; then n=1; ttlt=0; fi 
+res=$(echo "$ttlt $n" | awk '{print $1/$2}');
+if [ "$res" = "0" ]; then resd="Timeout"; else resd="$res ms"; scount=$[$scount+1]; scountl=$[$scountl+1]; 
+pingsum=$(echo "$pingsum $res" | awk '{print $1+$2}');
+fi 
+eqn6=$(cat /tmp/pingbench-ping6.tmp); ttlt6=$(echo $eqn6 | awk '{print $1 + $2 + $3 + $4 + $5 + $6 + $7 + $8 + $9 + $10}')
+count6=$(cat /tmp/pingbench-count6.tmp); n6=$(echo "$count6" | grep ok | sort | uniq -c | awk '{print $1}')
+if ! [[ "$n6" =~ ^[0-9]+$ ]]; then n6=1; ttlt6=0; fi 
+res6=$(echo "$ttlt6 $n6" | awk '{print $1/$2}');
+if [ "$res6" = "0" ]; then resd6="Timeout"; else resd6="$res6 ms"; scount6=$[$scount+1]; scountl6=$[$scountl6+1]; 
+pingsum6=$(echo "$pingsum6 $res6" | awk '{print $1+$2}');
+fi 
+lengthn=${#resd}
+case $lengthn in
+	'4')
+		spacing="        ";;
+	'5')
+		spacing="       ";;
+	'6')
+		spacing="      ";;
+	'7')
+		spacing="     ";;
+	'8')
+		spacing="    ";;
+	'9')
+		spacing="   ";;
+	'10')
+		spacing="  ";;
+	'11')
+		spacing=" ";;
+esac
+fi
+if [ $nip = 1 ]; then
+ if [ $ip4e = 1 ]; then
+ rm /tmp/pingbench-ping.tmp -f
+ rm /tmp/pingbench-count.tmp -f
+doping & pid1=$!; doping & pid2=$!; doping & pid3=$!; doping & pid4=$!; doping & pid5=$!; doping & pid6=$!; doping & pid7=$!; doping & pid8=$!; doping & pid9=$!; doping & pid10=$!; 
 wait $pid1; wait $pid2; wait $pid3; wait $pid4; wait $pid5; wait $pid6; wait $pid7; wait $pid8; wait $pid9; wait $pid10
 eqn=$(cat /tmp/pingbench-ping.tmp); ttlt=$(echo $eqn | awk '{print $1 + $2 + $3 + $4 + $5 + $6 + $7 + $8 + $9 + $10}')
 count=$(cat /tmp/pingbench-count.tmp); n=$(echo "$count" | grep ok | sort | uniq -c | awk '{print $1}')
 if ! [[ "$n" =~ ^[0-9]+$ ]]; then n=1; ttlt=0; fi 
 res=$(echo "$ttlt $n" | awk '{print $1/$2}');
-if [ "$res" = "0" ]; then resd="Timeout"; else resd="$res ms"; scount=$[$scount+1]; scountl=$[$scountl+1]; fi 
+if [ "$res" = "0" ]; then resd="Timeout"; else resd="$res ms"; scount=$[$scount+1]; scountl=$[$scountl+1]; 
+pingsum=$(echo "$pingsum $res" | awk '{print $1+$2}');
+fi 
+ fi
+ if [ $ip6e = 1 ]; then
+ rm /tmp/pingbench-ping6.tmp -f
+ rm /tmp/pingbench-count6.tmp -f
+doping6 & pid11=$!; doping6 & pid12=$!; doping6 & pid13=$!; doping6 & pid14=$!; doping6 & pid15=$!; doping6 & pid16=$!; doping6 & pid17=$!; doping6 & pid18=$!; doping6 & pid19=$!; doping6 & pid20=$!
+wait $pid11; wait $pid12; wait $pid13; wait $pid14; wait $pid15; wait $pid16; wait $pid17; wait $pid18; wait $pid19; wait $pid20
+eqn6=$(cat /tmp/pingbench-ping6.tmp); ttlt6=$(echo $eqn6 | awk '{print $1 + $2 + $3 + $4 + $5 + $6 + $7 + $8 + $9 + $10}')
+count6=$(cat /tmp/pingbench-count6.tmp); n6=$(echo "$count6" | grep ok | sort | uniq -c | awk '{print $1}')
+if ! [[ "$n6" =~ ^[0-9]+$ ]]; then n6=1; ttlt6=0; fi 
+res6=$(echo "$ttlt6 $n6" | awk '{print $1/$2}');
+if [ "$res6" = "0" ]; then resd6="Timeout"; else resd6="$res6 ms"; scount6=$[$scount+1]; scountl6=$[$scountl6+1]; 
+pingsum6=$(echo "$pingsum6 $res6" | awk '{print $1+$2}');
+fi 
+ fi
+fi
+if [ "$serv6" = "NA" ]; then resd6="N/A"; fi
+disp=$resd$spacing$resd6
+if [ "$nip" = 1 ]; then
+if [ "$ip4e" = 1 ]; then
+disp=$resd
+else
+disp=$resd6
+fi
+fi
 }
 
-ip=$( wget -qO- ipv4.icanhazip.com ) # Getting IPv4
-scount=0; region=0 # Total server and region count
+pingtest(){
+nip=0
+ip4e=0; ip6e=0
+sip4=$( wget -qO- ipv4.icanhazip.com ) # Getting IPv4
+if [ $ip4t = 1 ]; then
+if [ ! -z "$sip4" ]; then nip=$[$nip+1]; ip4e=1; dsip4="Your public IPv4 is $sip4"; 
+else dsip4="You don't have a working IPv4 address"; fi
+fi
+sip6=$( wget -qO- ipv6.icanhazip.com ) # Getting IPv6
+if [ $ip6t = 1 ]; then
+if [ ! -z "$sip6" ]; then nip=$[$nip+1]; ip6e=1; dsip6="Your public IPv6 is $sip6"; 
+else dsip6="You don't have a working IPv6 address"; fi
+fi
+testipn=$[$ip4t + $ip6t];
+if [ $testipn = 2 ]; then
+hol="\n";
+else hol=""
+fi
+if [ $nip = 2 ]; then
+pingt="IPv4 avg    IPv6 avg"
+wohoo="-----------------------------------------------------------------------------"
+else pingt="Avg ping"
+wohoo="-----------------------------------------------------------------"
+fi
+if [ $nip = 0 ]; then
+echo "The test is not possible! You do not have a working IP address."
+exit
+fi
+
+scount4=0; region4=0; scount6=0; region6=0 # Total server and region count
 
 # Ping test via ping
 echo " "
-echo "-----------------------------------------------------------------"
-echo "Ping benchmark by plush (v0.4.4)"
-echo "Your public IPv4 is $ip"
-echo "-----------------------------------------------------------------"
+echo "$wohoo"
+echo "Ping benchmark by plush (v1.0)"
+echo -e "$dsip4$hol$dsip6"
+echo "$wohoo"
 echo " "
 echo " "
-echo "-----------------------------------------------------------------"
+echo "$wohoo"
 echo "Test Region : CDN"
-scountl=0 # Reset region server count
-echo "Description			Provider		Avg ping"
-echo "-----------------------------------------------------------------"
-serv="8.8.8.8"; pingcalc; resc00=$res; 
-echo "Google DNS			Google			$resd"
-serv="cachefly.cachefly.net"; pingcalc; resc01=$res; 
-echo "Cachefly CDN			Cachefly		$resd"
-serv="cdn.teliacompany.com"; pingcalc; resc04=$res; 
-echo "Telia CDN Web			Telia			$resd"
-serv="cloudflare.com"; pingcalc; resc02=$res; 
-echo "Cloudflare Web			Cloudflare		$resd"
-serv="facebook.com"; pingcalc; resc03=$res; 
-echo "Facebook Web			Facebook		$resd"
-echo "-----------------------------------------------------------------"
-if [ "$scountl" != "0" ]; then
-cdnavg=$(echo "$resc00 $resc01 $resc02 $resc03 $resc04 $scountl" | awk '{print $1/$6 + $2/$6 + $3/$6 + $4/$6 + $5/$6}');
+scountl=0; scountl6=0; pingsum4=0; pingsum6=0
+echo "Description			Provider		$pingt"
+echo "$wohoo"
+serv="8.8.8.8"; serv6=2001:4860:4860::8888; pingcalc; resc00=$res; 
+echo "Google DNS			Google			$disp"
+serv="cachefly.cachefly.net"; serv6="NA"; pingcalc; 
+echo "Cachefly CDN			Cachefly		$disp"
+serv="cdn.teliacompany.com"; serv6="NA"; pingcalc; 
+echo "Telia CDN Web			Telia			$disp"
+serv="cloudflare.com"; serv6="cloudflare.com"; pingcalc; 
+echo "Cloudflare Web			Cloudflare		$disp"
+serv="facebook.com"; serv6="facebook.com"; pingcalc; 
+echo "Facebook Web			Facebook		$disp"
+echo "$wohoo"
+if [ "$scountl" != "0" ] || [ "$scountl6" != "0" ]; then
+if [ "$nip" = 2 ]; then
+cdnavg=$(echo "$pingsum $scountl" | awk '{print $1/$2}');
+echo "Successful servers IPv4 : $scountl / IPv6 : $scountl6"
+cdnavg6=$(echo "$pingsum6 $scountl6" | awk '{print $1/$2}');
+echo "Average ping IPv4 : $cdnavg ms / IPv6 : $cdnavg6 ms"
+cdnavgnorm=$(echo "$cdnavg" | awk '{print $1+20}');
+scorecdn=$(echo "$cdnavgnorm 200" | awk '{print exp(-$1/$2)*110.517091808}');
+cdnavgnorm6=$(echo "$cdnavg6" | awk '{print $1+20}');
+scorecdn6=$(echo "$cdnavgnorm6 200" | awk '{print exp(-$1/$2)*110.517091808}');
+echo "IPv4 score : $scorecdn"
+echo "IPv6 score : $scorecdn6"
+scorecdnavg46=$(echo "$scorecdn $scorecdn6" | awk '{print $1/2 + $2/2}');
+echo "Average score : $scorecdnavg46"
+fi
+if [ "$nip" = 1 ]; then
+cdnavg=$(echo "$pingsum $scountl" | awk '{print $1/$2}');
 echo "Successful servers : $scountl / Average ping : $cdnavg ms"
+if [ "$ip6e" = 1 ]; then
+cdnavgnorm6=$(echo "$cdnavg6" | awk '{print $1+20}');
+scorecdn6=$(echo "$cdnavgnorm6 200" | awk '{print exp(-$1/$2)*110.517091808}');
+echo "Score : $scorecdn"
+else
 cdnavgnorm=$(echo "$cdnavg" | awk '{print $1+20}');
 scorecdn=$(echo "$cdnavgnorm 200" | awk '{print exp(-$1/$2)*110.517091808}');
 echo "Score : $scorecdn"
+fi
+fi
 cdns=1
 else
 cdns=0
@@ -72,11 +203,11 @@ fi
 
 echo " "
 echo " "
-echo "-----------------------------------------------------------------"
+echo "$wohoo"
 echo "Test Region : Americas"
-scountl=0 # Reset region server count
+scountl=0; pingsum4=0; pingsum6=0
 echo "Location			Provider		Avg ping"
-echo "-----------------------------------------------------------------"
+echo "$wohoo"
 serv="repos.lax-noc.com"; pingcalc; res000=$res; 
 echo "Los Angeles, CA, U.S.		QuadraNet		$resd"
 serv="lg.lax.psychz.net"; pingcalc; res001=$res; 
@@ -133,15 +264,13 @@ serv="lg.va.psychz.net"; pingcalc; res027=$res;
 echo "Ashburn, VA, U.S.		Psychz			$resd"
 serv="speedtest-tor1.digitalocean.com"; pingcalc; res028=$res; 
 echo "Toronto, ON, Canada		DigitalOcean		$resd"
-serv="198.50.174.1"; pingcalc; res029=$res; 
-echo "Montréal, QC, Canada		OVH			$resd"
 serv="ec2.sa-east-1.amazonaws.com"; pingcalc; res004=$res; 
 echo "São Paulo, Brazil		Amazon Web Services	$resd"
-echo "-----------------------------------------------------------------"
+echo "$wohoo"
 if [ "$scountl" != "0" ]; then
-ameavg=$(echo "$res000 $res001 $res002 $res003 $res004 $res005 $res006 $res007 $res008 $res009 $res010 $res011 $res012 $res013 $res014 $res015 $res016 $res017 $res018 $res019 $res020 $res021 $res022 $res023 $res024 $res025 $res026 $res027 $res028 $res029 $scountl" | awk '{print $1/$31 + $2/$31 + $3/$31 + $4/$31 + $5/$31 + $6/$31 + $7/$31 + $8/$31 + $9/$31 + $10/$31 + $11/$31 + $12/$31 + $13/$31 + $14/$31 + $15/$31 + $16/$31 + $17/$31 + $18/$31 + $19/$31 + $20/$31 + $21/$31 + $22/$31 + $23/$31 + $24/$31 + $25/$31 + $26/$31 + $27/$31 + $28/$31 + $29/$31 + $30/$31}');
-echo "Successful servers : $scountl / Average ping : $ameavg ms"
+ameavg=$(echo "$pingsum $scountl" | awk '{print $1/$2}');
 scoreame=$(echo "$ameavg 400" | awk '{print exp(-$1/$2)*100}');
+echo "Successful servers : $scountl / Average ping : $ameavg ms"
 echo "Score : $scoreame"
 region=$[$region+1]
 else
@@ -154,11 +283,11 @@ fi
 
 echo " "
 echo " "
-echo "-----------------------------------------------------------------"
+echo "$wohoo"
 echo "Test Region : Europe"
-scountl=0 # Reset region server count
+scountl=0; pingsum4=0; pingsum6=0
 echo "Location			Provider		Avg ping"
-echo "-----------------------------------------------------------------"
+echo "$wohoo"
 serv="fra-de-ping.vultr.com"; pingcalc; res100=$res; 
 echo "Frankfurt, Germany		Choopa			$resd"
 serv="speedtest.frankfurt.linode.com"; pingcalc; res101=$res; 
@@ -183,11 +312,11 @@ serv="89.46.74.1"; pingcalc; res109=$res;
 echo "Arrezo, Italy			Aruba Cloud		$resd"
 serv="81.2.236.1"; pingcalc; res111=$res; 
 echo "Prague, Czech Republic		Aruba Cloud		$resd"
-echo "-----------------------------------------------------------------"
+echo "$wohoo"
 if [ "$scountl" != "0" ]; then
-euavg=$(echo "$res100 $res101 $res102 $res103 $res104 $res105 $res106 $res107 $res108 $res109 $res110 $res111 $scountl" | awk '{print $1/$13 + $2/$13 + $3/$13 + $4/$13 + $5/$13 + $6/$13 + $7/$13 + $8/$13 + $9/$13 + $10/$13 + $11/$13 + $12/$13}');
-echo "Successful servers : $scountl / Average ping : $euavg ms"
+euavg=$(echo "$pingsum $scountl" | awk '{print $1/$2}');
 scoreeu=$(echo "$euavg 400" | awk '{print exp(-$1/$2)*100}');
+echo "Successful servers : $scountl / Average ping : $euavg ms"
 echo "Score : $scoreeu"
 region=$[$region+1]
 else
@@ -200,11 +329,11 @@ fi
 
 echo " "
 echo " "
-echo "-----------------------------------------------------------------"
+echo "$wohoo"
 echo "Test Region : Asia & Oceania (China excluded)"
-scountl=0 # Reset region server count
+scountl=0; pingsum4=0; pingsum6=0
 echo "Location			Provider		Avg ping"
-echo "-----------------------------------------------------------------"
+echo "$wohoo"
 serv="sgp-ping.vultr.com"; pingcalc; res200=$res; 
 echo "Singapore			Choopa			$resd"
 serv="103.208.85.1"; pingcalc; res201=$res; 
@@ -245,11 +374,12 @@ serv="syd.infrastructures.ovh"; pingcalc; res218=$res;
 echo "Sydney, Australia		OVH			$resd"
 serv="ec2.ap-southeast-2.amazonaws.com"; pingcalc; res219=$res; 
 echo "Sydney, Australia		Amazon Web Services	$resd"
-echo "-----------------------------------------------------------------"
+echo "$wohoo"
 if [ "$scountl" != "0" ]; then
-asiavg=$(echo "$res200 $res201 $res202 $res203 $res204 $res205 $res206 $res207 $res208 $res209 $res210 $res211 $res212 $res213 $res214 $res215 $res216 $res217 $res218 $res219 $scountl" | awk '{print $1/$21 + $2/$21 + $3/$21 + $4/$21 + $5/$21 + $6/$21 + $7/$21 + $8/$21 + $9/$21 + $10/$21 + $11/$21 + $12/$21 + $13/$21 + $14/$21 + $15/$21 + $16/$21 + $17/$21 + $18/$21 + $19/$21 + $20/$21}');
+asiavg=$(echo "$pingsum $scountl" | awk '{print $1/$2}');
 echo "Successful servers : $scountl / Average ping : $asiavg ms"
 scoreasi=$(echo "$asiavg 400" | awk '{print exp(-$1/$2)*100}');
+echo "Successful servers : $scountl / Average ping : $asiavg ms"
 echo "Score : $scoreasi"
 region=$[$region+1]
 else
@@ -262,11 +392,11 @@ fi
 
 echo " "
 echo " "
-echo "-----------------------------------------------------------------"
+echo "$wohoo"
 echo "Test Region : China (Chinese peering)"
-scountl=0 # Reset region server count
+scountl=0; pingsum4=0; pingsum6=0
 echo "Location			Provider		Avg ping"
-echo "-----------------------------------------------------------------"
+echo "$wohoo"
 serv="120.26.207.1"; pingcalc; res300=$res; 
 echo "Zhejiang, China			Alibaba Cloud		$resd"
 serv="119.147.101.1"; pingcalc; res301=$res; 
@@ -289,9 +419,9 @@ serv="112.29.173.1"; pingcalc; res307=$res;
 echo "Anhui, China			China Mobile		$resd"
 serv="221.235.205.37"; pingcalc; res308=$res; 
 echo "Hubei, China			China Telecom		$resd"
-echo "-----------------------------------------------------------------"
+echo "$wohoo"
 if [ "$scountl" != "0" ]; then
-cnavg=$(echo "$res300 $res301 $res302 $res303 $res304 $res305 $res306 $res307 $res308 $res309 $res310 $scountl" | awk '{print $1/$12 + $2/$12 + $3/$12 + $4/$12 + $5/$12 + $6/$12 + $7/$12 + $8/$12 + $9/$12 + $10/$12 + $11/$12}');
+cnavg=$(echo "$pingsum $scountl" | awk '{print $1/$2}');
 echo "Successful servers : $scountl / Average ping : $cnavg ms"
 scorecn=$(echo "$cnavg 500" | awk '{print exp(-$1/$2)*100}');
 echo "Score : $scorecn"
@@ -306,7 +436,7 @@ fi
 
 echo " "
 echo " "
-echo "-----------------------------------------------------------------"
+echo "$wohoo"
 if [ "$region" != 0 ]; then
 regionalavg=$(echo "$ameavg $euavg $asiavg $cnavg $region" | awk '{print $1/$5 + $2/$5 + $3/$5 + $4/$5}');
 echo "Regional average : $regionalavg ms"
@@ -321,6 +451,23 @@ fi
 else
 echo "All servers are unreachable. Is your Internet off?"
 fi
-echo "-----------------------------------------------------------------"
+echo "$wohoo"
 rm /tmp/pingbench-ping.tmp -f
 rm /tmp/pingbench-count.tmp -f
+}
+
+ip4t=0; ip6t=0
+case $1 in
+	'-4')
+		ip4t=1; ip6t=0; pingtest;;
+	'-6')
+		ip6t=1; ip4t=0; pingtest;;
+	'-46')
+		ip4t=1; ip6t=1; pingtest;;
+	'-64')
+		ip4t=1; ip6t=1; pingtest;;
+	'-h' )
+		hlp;;
+	*)
+		ip4t=1; ip6t=1; pingtest;;
+esac
