@@ -1,4 +1,9 @@
-# pingbench
+# pingbench - dualstack
+
+## the future of pingbench, with complete dualstack functionality
+
+### This branch of pingbench is in alpha stage. There is a lot of unfinished stuff.
+    
 Tests general peering performance by comparing **ICMP** pings across publicly available test servers.
 This script compares pings to multiple regions (North America, Europe, Asia & Oceania).
 
