@@ -1,6 +1,6 @@
 ########################################
 # Ping benchmark script by pluush      #
-# v1.0 alpha 1                         #
+# v1.0 alpha 2                         #
 # Copyright(C) 2017 - pluush           #
 # github.com/pluush/pingbench          #
 # NOTE: Scores are not comparable      #
@@ -166,9 +166,9 @@ echo "$wohoo"
 if [ "$scountl" != "0" ] || [ "$scountl6" != "0" ]; then
 if [ "$nip" = 2 ]; then
 cdnavg=$(echo "$pingsum $scountl" | awk '{print $1/$2}');
-echo "Successful servers IPv4 : $scountl / IPv6 : $scountl6"
+echo "Successful servers IPv4 : $scountl / 5 | IPv6 : $scountl6 / 3"
 cdnavg6=$(echo "$pingsum6 $scountl6" | awk '{print $1/$2}');
-echo "Average ping IPv4 : $cdnavg ms / IPv6 : $cdnavg6 ms"
+echo "Average ping IPv4 : $cdnavg ms | IPv6 : $cdnavg6 ms"
 cdnavgnorm=$(echo "$cdnavg" | awk '{print $1+20}');
 scorecdn=$(echo "$cdnavgnorm 200" | awk '{print exp(-$1/$2)*110.517091808}');
 cdnavgnorm6=$(echo "$cdnavg6" | awk '{print $1+20}');
@@ -179,13 +179,15 @@ scorecdnavg46=$(echo "$scorecdn $scorecdn6" | awk '{print $1/2 + $2/2}');
 echo "Average score : $scorecdnavg46"
 fi
 if [ "$nip" = 1 ]; then
-cdnavg=$(echo "$pingsum $scountl" | awk '{print $1/$2}');
-echo "Successful servers : $scountl / Average ping : $cdnavg ms"
 if [ "$ip6e" = 1 ]; then
+cdnavg6=$(echo "$pingsum6 $scountl6" | awk '{print $1/$2}');
+echo "Successful servers : $scountl6 | Average ping : $cdnavg6 ms"
 cdnavgnorm6=$(echo "$cdnavg6" | awk '{print $1+20}');
 scorecdn6=$(echo "$cdnavgnorm6 200" | awk '{print exp(-$1/$2)*110.517091808}');
-echo "Score : $scorecdn"
+echo "Score : $scorecdn6"
 else
+cdnavg=$(echo "$pingsum $scountl" | awk '{print $1/$2}');
+echo "Successful servers : $scountl | Average ping : $cdnavg ms"
 cdnavgnorm=$(echo "$cdnavg" | awk '{print $1+20}');
 scorecdn=$(echo "$cdnavgnorm 200" | awk '{print exp(-$1/$2)*110.517091808}');
 echo "Score : $scorecdn"
@@ -201,84 +203,105 @@ err=1
 err1="(CDN servers are unreachable) " 
 fi
 
-echo " "
+
+# Ping test via ping
 echo " "
 echo "$wohoo"
 echo "Test Region : Americas"
-scountl=0; pingsum4=0; pingsum6=0
-echo "Location			Provider		Avg ping"
+scountl=0; scountl6=0; pingsum4=0; pingsum6=0
+echo "Description			Provider		$pingt"
 echo "$wohoo"
-serv="repos.lax-noc.com"; pingcalc; res000=$res; 
-echo "Los Angeles, CA, U.S.		QuadraNet		$resd"
-serv="lg.lax.psychz.net"; pingcalc; res001=$res; 
-echo "Los Angeles, CA, U.S.		Psychz			$resd"
-serv="lax-ca-us-ping.vultr.com"; pingcalc; res002=$res; 
-echo "Los Angeles, CA, U.S.		Choopa			$resd"
-serv="lg.la.ramnode.com"; pingcalc; res003=$res; 
-echo "Los Angeles, CA, U.S.		RamNode			$resd"
-serv="speedtest.sjc01.softlayer.com"; pingcalc; res005=$res; 
-echo "San Jose, CA, U.S.		RamNode			$resd"
-serv="speedtest.fremont.linode.com"; pingcalc; res006=$res; 
-echo "Freemont, CA, U.S.		Linode			$resd"
-serv="speedtest-sfo1.digitalocean.com"; pingcalc; res007=$res; 
-echo "San Francisco, CA, U.S.		DigitalOcean		$resd"
-serv="sjo-ca-us-ping.vultr.com"; pingcalc; res008=$res; 
-echo "Silicon Valley, CA, U.S.	Choopa			$resd"
-serv="tx-us-ping.vultr.com"; pingcalc; res009=$res; 
-echo "Dallas, TX, U.S.		Choopa			$resd"
-serv="speedtest.dallas.linode.com"; pingcalc; res010=$res; 
-echo "Dallas, TX, U.S.		Linode			$resd"
-serv="lg.texas.psychz.net"; pingcalc; res011=$res; 
-echo "Dallas, TX, U.S.		Psychz			$resd"
-serv="il-us-ping.vultr.com"; pingcalc; res012=$res; 
-echo "Chicago, IL, U.S.		Choopa			$resd"
-serv="ga-us-ping.vultr.com"; pingcalc; res013=$res; 
-echo "Atlanta, GA, U.S.		Choopa			$resd"
-serv="speedtest.atlanta.linode.com"; pingcalc; res014=$res; 
-echo "Atlanta, GA, U.S.		Linode			$resd"
-serv="lg.atl.ramnode.com"; pingcalc; res015=$res; 
-echo "Atlanta, GA, U.S.		RamNode			$resd"
-serv="speed.atl.coloat.com"; pingcalc; res016=$res; 
-echo "Atlanta, GA, U.S.		Coloat			$resd"
-serv="wa-us-ping.vultr.com"; pingcalc; res017=$res; 
-echo "Seattle, WA, U.S.		Choopa			$resd"
-serv="lg.sea.ramnode.com"; pingcalc; res018=$res; 
-echo "Seattle, WA, U.S.		RamNode			$resd"
-serv="speedtest.sea01.softlayer.com"; pingcalc; res019=$res; 
-echo "Seattle, WA, U.S.		Softlayer		$resd"
-serv="nj-us-ping.vultr.com"; pingcalc; res020=$res; 
-echo "New York, NY, U.S.		Choopa			$resd"
-serv="lg.nyc.ramnode.com"; pingcalc; res021=$res; 
-echo "New York, NY, U.S.		RamNode			$resd"
-serv="speedtest-nyc3.digitalocean.com"; pingcalc; res022=$res; 
-echo "New York, NY, U.S.		DigitalOcean		$resd"
-serv="lg.buf.colocrossing.com"; pingcalc; res023=$res; 
-echo "Buffalo, NY, U.S.		ColoCrossing		$resd"
-serv="speedtest.newark.linode.com"; pingcalc; res024=$res; 
-echo "Newark, NJ, U.S.		Linode			$resd"
-serv="fl-us-ping.vultr.com"; pingcalc; res025=$res; 
-echo "Miami, FL, U.S.			Choopa			$resd"
-serv="speedtest.wdc01.softlayer.com"; pingcalc; res026=$res; 
-echo "Washington, DC, U.S.		Softlayer		$resd"
-serv="lg.va.psychz.net"; pingcalc; res027=$res; 
-echo "Ashburn, VA, U.S.		Psychz			$resd"
-serv="speedtest-tor1.digitalocean.com"; pingcalc; res028=$res; 
-echo "Toronto, ON, Canada		DigitalOcean		$resd"
-serv="ec2.sa-east-1.amazonaws.com"; pingcalc; res004=$res; 
-echo "São Paulo, Brazil		Amazon Web Services	$resd"
+serv="repos.lax-noc.com"; serv6="repos.lax-noc.com"; pingcalc; 
+echo "Los Angeles, CA, U.S.		QuadraNet		$disp"
+serv="lg.lax.psychz.net"; serv6="2604:6600:0:c::1"; pingcalc; 
+echo "Los Angeles, CA, U.S.		Psychz			$disp"
+serv="lax-ca-us-ping.vultr.com"; serv6="lax-ca-us-ipv6.vultr.com"; pingcalc; 
+echo "Los Angeles, CA, U.S.		Choopa			$disp"
+serv="lg.la.ramnode.com"; serv6="2604:180:3:1::f1"; pingcalc;
+echo "Los Angeles, CA, U.S.		RamNode			$disp"
+serv="speedtest.sjc01.softlayer.com"; serv6="speedtest.sjc01.softlayer.com"; pingcalc;
+echo "San Jose, CA, U.S.		SoftLayer		$disp"
+serv="speedtest.fremont.linode.com"; serv6="speedtest.fremont.linode.com"; pingcalc;
+echo "Freemont, CA, U.S.		Linode			$disp"
+serv="speedtest-sfo1.digitalocean.com"; serv6="speedtest-sfo1.digitalocean.com"; pingcalc;
+echo "San Francisco, CA, U.S.		DigitalOcean		$disp"
+serv="sjo-ca-us-ping.vultr.com"; serv6="sjo-ca-us-ipv6.vultr.com"; pingcalc;
+echo "Silicon Valley, CA, U.S.	Choopa			$disp"
+serv="tx-us-ping.vultr.com"; serv6="tx-us-ipv6.vultr.com"; pingcalc;
+echo "Dallas, TX, U.S.		Choopa			$disp"
+serv="speedtest.dallas.linode.com"; serv6="speedtest.dallas.linode.com"; pingcalc;
+echo "Dallas, TX, U.S.		Linode			$disp"
+serv="lg.texas.psychz.net"; serv6="2604:6600:2000:6::1"; pingcalc;
+echo "Dallas, TX, U.S.		Psychz			$disp"
+serv="il-us-ping.vultr.com"; serv6="il-us-ipv6.vultr.com"; pingcalc;
+echo "Chicago, IL, U.S.		Choopa			$disp"
+serv="ga-us-ping.vultr.com"; serv6="ga-us-ipv6.vultr.com"; pingcalc;
+echo "Atlanta, GA, U.S.		Choopa			$disp"
+serv="speedtest.atlanta.linode.com"; serv6="speedtest.atlanta.linode.com"; pingcalc;
+echo "Atlanta, GA, U.S.		Linode			$disp"
+serv="lg.atl.ramnode.com"; serv6="2604:180::9b07:1d5b"; pingcalc;
+echo "Atlanta, GA, U.S.		RamNode			$disp"
+serv="speed.atl.coloat.com"; serv6="NA"; pingcalc;
+echo "Atlanta, GA, U.S.		Coloat			$disp"
+serv="wa-us-ping.vultr.com"; serv6="wa-us-ipv6.vultr.com"; pingcalc;
+echo "Seattle, WA, U.S.		Choopa			$disp"
+serv="lg.sea.ramnode.com"; serv6="2604:180:1::bd5a:1cb3"; pingcalc;
+echo "Seattle, WA, U.S.		RamNode			$disp"
+serv="speedtest.sea01.softlayer.com"; serv6="speedtest.sea01.softlayer.com"; pingcalc;
+echo "Seattle, WA, U.S.		Softlayer		$disp"
+serv="nj-us-ping.vultr.com"; serv6="nj-us-ipv6.vultr.com"; pingcalc;
+echo "New York, NY, U.S.		Choopa			$disp"
+serv="lg.nyc.ramnode.com"; serv6="2604:180:2::d2a1:3da5"; pingcalc;
+echo "New York, NY, U.S.		RamNode			$disp"
+serv="speedtest-nyc3.digitalocean.com"; serv6="speedtest-nyc3.digitalocean.com"; pingcalc;
+echo "New York, NY, U.S.		DigitalOcean		$disp"
+serv="lg.buf.colocrossing.com"; serv6="NA"; pingcalc;
+echo "Buffalo, NY, U.S.		ColoCrossing		$disp"
+serv="speedtest.newark.linode.com"; serv6="speedtest.newark.linode.com"; pingcalc;
+echo "Newark, NJ, U.S.		Linode			$disp"
+serv="fl-us-ping.vultr.com"; serv6="fl-us-ipv6.vultr.com"; pingcalc;
+echo "Miami, FL, U.S.			Choopa			$disp"
+serv="speedtest.wdc01.softlayer.com"; serv6="speedtest.wdc01.softlayer.com"; pingcalc;
+echo "Washington, DC, U.S.		Softlayer		$disp"
+serv="lg.va.psychz.net"; serv6="NA"; pingcalc;
+echo "Ashburn, VA, U.S.		Psychz			$disp"
+serv="speedtest-tor1.digitalocean.com"; serv6="speedtest-tor1.digitalocean.com"; pingcalc;
+echo "Toronto, ON, Canada		DigitalOcean		$disp"
+serv="ec2.sa-east-1.amazonaws.com"; serv6="NA"; pingcalc; 
+echo "São Paulo, Brazil		Amazon Web Services	$disp"
 echo "$wohoo"
-if [ "$scountl" != "0" ]; then
+if [ "$scountl" != "0" ] || [ "$scountl6" != "0" ]; then
+if [ "$nip" = 2 ]; then
 ameavg=$(echo "$pingsum $scountl" | awk '{print $1/$2}');
-scoreame=$(echo "$ameavg 400" | awk '{print exp(-$1/$2)*100}');
-echo "Successful servers : $scountl / Average ping : $ameavg ms"
+echo "Successful servers IPv4 : $scountl / 29 | IPv6 : $scountl6 / 25"
+ameavg6=$(echo "$pingsum6 $scountl6" | awk '{print $1/$2}');
+echo "Average ping IPv4 : $ameavg ms | IPv6 : $ameavg6 ms"
+scoreame=$(echo "$ameavg 200" | awk '{print exp(-$1/$2)*100}');
+scoreame6=$(echo "$ameavg6 200" | awk '{print exp(-$1/$2)*100}');
+echo "IPv4 score : $scoreame"
+echo "IPv6 score : $scoreame6"
+scoreameavg46=$(echo "$scoreame $scoreame6" | awk '{print $1/2 + $2/2}');
+echo "Average score : $scoreameavg46"
+fi
+if [ "$nip" = 1 ]; then
+ameavg=$(echo "$pingsum $scountl" | awk '{print $1/$2}');
+echo "Successful servers : $scountl | Average ping : $ameavg ms"
+if [ "$ip6e" = 1 ]; then
+scoreame6=$(echo "$ameavg6 200" | awk '{print exp(-$1/$2)*100}');
 echo "Score : $scoreame"
-region=$[$region+1]
 else
+scoreame=$(echo "$ameavg 200" | awk '{print exp(-$1/$2)*100}');
+echo "Score : $scoreame"
+fi
+fi
+ames=1
+else
+ames=0
 echo "All servers are unreachable. Please check your firewall."
-ameavg=0
+ameavgnorm=0
 scoreame=0
 err=1
-err2="(American servers are unreachable) " 
+err1="(American servers are unreachable) " 
 fi
 
 echo " "
